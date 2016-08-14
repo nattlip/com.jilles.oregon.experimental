@@ -16,6 +16,3 @@ I have now 4 sensor devices  added the BTHR968 device id 5d60 (first for hex dig
 install the THGN132ES or THGR228N as THGR122NX  
 
 http://wmrx00.sourceforge.net/Arduino/OregonScientific-RF-Protocols.pdf
-
-
-

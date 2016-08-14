@@ -1,0 +1,8 @@
+﻿# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+README.md
+appNLRB.js
+api.js

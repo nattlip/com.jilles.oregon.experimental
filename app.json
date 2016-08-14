@@ -1,6 +1,6 @@
 {
   "id": "com.jilles.oregon",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "compatibility": ">=0.9.1",
   "category": [ "climate" ],
   "name": {
@@ -12,16 +12,25 @@
     "nl": "importeerd oregonscientific sensor data"
   },
   "author": {
-    "name": "Jilles Miedema"
+    "name": "Jilles Miedema",
+    "email": "athom.jilles.miedema@gmail.com"
   },
 
     "contributors": {
-    "developers": [
-      {
-        "name": "Floris van Ingen",
-        "email": "floris.vaningen@isds.nl"
-      }
-    ]
+      "developers": [
+        {
+          "name": "Jilles Miedema",
+          "email": "athom.jilles.miedema@gmail.com"
+        },
+        {
+          "name": "Ramon Baas",
+          "email": "athom@ramonbaas.nl"
+        },
+        {
+          "name": "Floris van Ingen",
+          "email": "floris.vaningen@isds.nl"
+        }
+      ]
    
   },
 
@@ -99,31 +108,86 @@
     "433": {
       "OregonV2": {
         "sof": [
-          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-          1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
-        ],
-        "eof": [],
-        "words": [
-          [ 0, 1 ],
-          [ 1, 0 ]
-        ],
-        "manchesterUnit": 488,
-        "manchesterMaxUnits": 2,
-        "interval": 32000,
-        "repetitions": 0,
-        "sensitivity": 2,
-        "minimalLength": 150,
-        "maximalLength": 180
-      },
-      "OregonV3": {
-        "sof": [
-          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-          0, 1, 1, 0, 0, 1, 1, 0
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
         ],
         "eof": [],
         "words": [
@@ -134,8 +198,80 @@
         "manchesterMaxUnits": 2,
         "repetitions": 0,
         "sensitivity": 2,
-        "minimalLength": 60,
+        "minimalLength": 140,
+        "maximalLength": 180
+      },
+      "OregonV3": {
+        "sof": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,          
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,          
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,          
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0         
+        ],
+        "eof": [],
+        "words": [
+        [ 0, 1 ],
+        [ 1, 0 ]          
+        ],
+       "manchesterUnit": 488.28125,
+       "manchesterMaxUnits": 2,
+       "repetitions": 0,
+       "sensitivity": 2,
+       "minimalLength": 60,
         "maximalLength": 90
+
       }
     }
   }
