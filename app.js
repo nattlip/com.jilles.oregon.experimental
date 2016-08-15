@@ -272,7 +272,7 @@ var parseRXData = function (payLoad,version)
 
     // Decode the data part
     var result = decodeData(datastring);
-
+    util.log('                                                     jilles result not atring     ', util.inspect(result, false, null));
     if (typeof result != 'string') {
         // Now we have all elements for the unique device ID
         // Note: from user perspective it is nicer not to include the
@@ -300,7 +300,8 @@ var parseRXData = function (payLoad,version)
         Sensors[uniqueId] = result;
         util.log(Sensors);
 
-
+        // jilles goto makeHomeyDriverCompatibleAandPasstoDriver(result)
+        makeHomeyDriverCompatibleAandPasstoDriver(result)
     }  // decodedatapart
         
 		/*
@@ -320,151 +321,153 @@ var parseRXData = function (payLoad,version)
       
 
         // if data is readable and known sensor
-        if (hexaddress == '5d60' || hexaddress == "1d20" || hexaddress == "1a2d" || hexaddress == "e2cf" ) {
+    //if (hexaddress == '5d60' || hexaddress == "1d20" || hexaddress == "1a2d" || hexaddress == "e2cf" || hexaddress == "2914") {
 
 
-        //5th nibbel channel
-        var channelnibble = datastring.slice(16, 20);
-        util.log('channel lsfb nibble ', channelnibble);
-        var channel = channelnibble.slice(4, 4);
+    //    //5th nibbel channel
+    //    var channelnibble = datastring.slice(16, 20);
+    //    util.log('channel lsfb nibble ', channelnibble);
+    //    var channel = channelnibble.slice(4, 4);
 
-        //nibble 6,7 rollingcode
-        var rollingCodenibble1 = datastring.slice(20, 24);
-        var rollingCodenibble2 = datastring.slice(24, 28);
-        // mark the inversion of nibbles in and outside
-        var rollingCode = convert.bin2hex(rollingCodenibble2 + rollingCodenibble1);
-        util.log('rolling code ', rollingCode);
+    //    //nibble 6,7 rollingcode
+    //    var rollingCodenibble1 = datastring.slice(20, 24);
+    //    var rollingCodenibble2 = datastring.slice(24, 28);
+    //    // mark the inversion of nibbles in and outside
+    //    var rollingCode = convert.bin2hex(rollingCodenibble2 + rollingCodenibble1);
+    //    util.log('rolling code ', rollingCode);
 
-        // 8th nibble is battery
-        // bit 0x4 is = battery low = 0100
-        var batterynibble = datastring.slice(28, 32);
-        util.log('batterynibble ', batterynibble);
-        var batteryFlagBit = batterynibble.slice(1, 2);
-        util.log('batteryFlagBit ', batteryFlagBit);
-        var battery;
-        var batteryforhomey;
-        // TODO: change to battery alarm capability , as battery value not available
-        if (batteryFlagBit == '1') {
-            battery = 'empty';
-            batteryforhomey = 10;
-            util.log('battery  ', battery);
-        }
-        else if (batteryFlagBit == '0') {
-            battery = 'OK';
-            batteryforhomey = 90;
-            util.log('battery  ', battery);
-        };
+    //    // 8th nibble is battery
+    //    // bit 0x4 is = battery low = 0100
+    //    var batterynibble = datastring.slice(28, 32);
+    //    util.log('batterynibble ', batterynibble);
+    //    var batteryFlagBit = batterynibble.slice(1, 2);
+    //    util.log('batteryFlagBit ', batteryFlagBit);
+    //    var battery;
+    //    var batteryforhomey;
+    //    // TODO: change to battery alarm capability , as battery value not available
+    //    if (batteryFlagBit == '1') {
+    //        battery = 'empty';
+    //        batteryforhomey = 10;
+    //        util.log('battery  ', battery);
+    //    }
+    //    else if (batteryFlagBit == '0') {
+    //        battery = 'OK';
+    //        batteryforhomey = 90;
+    //        util.log('battery  ', battery);
+    //    };
 
 
-            // nibbles 8 to 11
-            //  mark the inversion of nibbles in and outside
+    //        // nibbles 8 to 11
+    //        //  mark the inversion of nibbles in and outside
 
-            var temperatureNibble1 = datastring.slice(32, 36);
-            var temperatureNibble2 = datastring.slice(36, 40);
-            var temperatureNibble3 = datastring.slice(40, 44);
-            var temperatureNibble4 = datastring.slice(44, 48);
+    //        var temperatureNibble1 = datastring.slice(32, 36);
+    //        var temperatureNibble2 = datastring.slice(36, 40);
+    //        var temperatureNibble3 = datastring.slice(40, 44);
+    //        var temperatureNibble4 = datastring.slice(44, 48);
 
-            var temperatureHex = convert.bin2hex(temperatureNibble4 + temperatureNibble3 + temperatureNibble2 + temperatureNibble1);
+    //        var temperatureHex = convert.bin2hex(temperatureNibble4 + temperatureNibble3 + temperatureNibble2 + temperatureNibble1);
 
-            util.log('temperaturehex  ', temperatureHex);
+    //        util.log('temperaturehex  ', temperatureHex);
 
-            var temperature = convert.bin2hex(temperatureNibble3) + convert.bin2hex(temperatureNibble2) + '.' + convert.bin2hex(temperatureNibble1)
+    //        var temperature = convert.bin2hex(temperatureNibble3) + convert.bin2hex(temperatureNibble2) + '.' + convert.bin2hex(temperatureNibble1)
 
-            util.log(' negative temparaturesignhex  ', convert.bin2hex(temperatureNibble4));
+    //        util.log(' negative temparaturesignhex  ', convert.bin2hex(temperatureNibble4));
 
-            if (!(convert.bin2hex(temperatureNibble4) == 0))
-            { temperature = '-' + temperature; }
+    //        if (!(convert.bin2hex(temperatureNibble4) == 0))
+    //        { temperature = '-' + temperature; }
 
-            util.log('temperaturehex  ', temperature);
+    //        util.log('temperaturehex  ', temperature);
 
 
 
-            //nibbles 13,12 humidity in percent
+    //        //nibbles 13,12 humidity in percent
 
-            var humidityNibble1 = datastring.slice(48, 52);
-            var humidityNibble2 = datastring.slice(52, 56);
+    //        var humidityNibble1 = datastring.slice(48, 52);
+    //        var humidityNibble2 = datastring.slice(52, 56);
 
-            var humidityhex = convert.bin2hex(humidityNibble2) + convert.bin2hex(humidityNibble1);
-            var humidity = humidityhex; // means bcd hex numbers are digital numbers
-            util.log('humidityhex  ', humidityhex + '  %');
+    //        var humidityhex = convert.bin2hex(humidityNibble2) + convert.bin2hex(humidityNibble1);
+    //        var humidity = humidityhex; // means bcd hex numbers are digital numbers
+    //        util.log('humidityhex  ', humidityhex + '  %');
 
-           // util.log('result humidity qualification ', result.data.comfort);
+    //       // util.log('result humidity qualification ', result.data.comfort);
 
-            // nibbles 14,15 unknown
+    //        // nibbles 14,15 unknown
 
 
-            var nibble14 = datastring.slice(56, 60);
-            var nibble15 = datastring.slice(60, 64);
+    //        var nibble14 = datastring.slice(56, 60);
+    //        var nibble15 = datastring.slice(60, 64);
 
-            var u14to15hex = convert.bin2hex(nibble15) + convert.bin2hex(nibble14);
-            util.log('unknownhex  ', u14to15hex);
-            util.log('unknowndec  ', convert.hex2dec(u14to15hex));
+    //        var u14to15hex = convert.bin2hex(nibble15) + convert.bin2hex(nibble14);
+    //        util.log('unknownhex  ', u14to15hex);
+    //        util.log('unknowndec  ', convert.hex2dec(u14to15hex));
 
 
-            //nibbles 18..16  barometer
-            //http://www.cs.stir.ac.uk/~kjt/software/comms/wmr928.html
+    //        //nibbles 18..16  barometer
+    //        //http://www.cs.stir.ac.uk/~kjt/software/comms/wmr928.html
 
 
 
-            //  add direct info to right driver
-            if (hexaddress == '5d60') {
-                var baroNibble1 = datastring.slice(64, 68);
-                var baroNibble2 = datastring.slice(68, 72);
-                var baroNibble3 = datastring.slice(72, 76);
+    //        //  add direct info to right driver
+    //        if (hexaddress == '5d60')
 
+    //        {
+    //            temphydrobaro(datastring);
+    //            var baroNibble1 = datastring.slice(64, 68);
+    //            var baroNibble2 = datastring.slice(68, 72);
+    //            var baroNibble3 = datastring.slice(72, 76);
 
 
-                //convert.bin2hex(baroNibble3) = always 0xC
-                var baroHex = convert.bin2hex(baroNibble1) + convert.bin2hex(baroNibble2);
-                util.log('barohex  ', baroHex);
-                var baroDec = convert.hex2dec(baroHex);
-                util.log('baroDex  ', baroDec);
-                var barometerdec = parseInt(baroDec) + 856;
 
+    //            //convert.bin2hex(baroNibble3) = always 0xC
+    //            var baroHex = convert.bin2hex(baroNibble1) + convert.bin2hex(baroNibble2);
+    //            util.log('barohex  ', baroHex);
+    //            var baroDec = convert.hex2dec(baroHex);
+    //            util.log('baroDex  ', baroDec);
+    //            var barometerdec = parseInt(baroDec) + 856;
 
-                util.log('barometer  ', barometerdec);
 
-                var pressure = barometerdec;
+    //            util.log('barometer  ', barometerdec);
 
-                var forecasthex = convert.bin2hex(baroNibble3);
-                var forecast;
-                //Forecast:  2 = Cloudy, 3 = Rainy, 6 = Cloudy with Sun, C = Sunny
-                switch (forecasthex) {
-                    case "C":
-                        forecast = "Sunny";
-                        break;
-                    case "6":
-                        forecast = "Cloudy with Sun";
-                        break;
-                    case "3":
-                        forecast = "Rainy";
-                        break;
-                    case "2":
-                        forecast = "Cloudy";
-                        break;
-                }
+    //            var pressure = barometerdec;
 
+    //            var forecasthex = convert.bin2hex(baroNibble3);
+    //            var forecast;
+    //            //Forecast:  2 = Cloudy, 3 = Rainy, 6 = Cloudy with Sun, C = Sunny
+    //            switch (forecasthex) {
+    //                case "C":
+    //                    forecast = "Sunny";
+    //                    break;
+    //                case "6":
+    //                    forecast = "Cloudy with Sun";
+    //                    break;
+    //                case "3":
+    //                    forecast = "Rainy";
+    //                    break;
+    //                case "2":
+    //                    forecast = "Cloudy";
+    //                    break;
+    //            }
 
 
-                util.log('forecast ? ', forecast);
 
+    //            util.log('forecast ? ', forecast);
 
 
-                //nibbles 20..19  checksum ?
 
-                var nibble19 = datastring.slice(80, 84);
-                util.log('nibble19  ', nibble19);
-                var nibble20 = datastring.slice(84, 88);
-                util.log('nibble20  ', nibble20);
-                var chksm19to20hex = convert.bin2hex(nibble19) + convert.bin2hex(nibble20);
-                util.log('chksm19to20hex  ', chksm19to20hex);
-                util.log('chksm19to20dec  ', convert.hex2dec(chksm19to20hex));
+    //            //nibbles 20..19  checksum ?
 
+    //            var nibble19 = datastring.slice(80, 84);
+    //            util.log('nibble19  ', nibble19);
+    //            var nibble20 = datastring.slice(84, 88);
+    //            util.log('nibble20  ', nibble20);
+    //            var chksm19to20hex = convert.bin2hex(nibble19) + convert.bin2hex(nibble20);
+    //            util.log('chksm19to20hex  ', chksm19to20hex);
+    //            util.log('chksm19to20dec  ', convert.hex2dec(chksm19to20hex));
 
 
 
-                //  3 bytes to go 
 
+    //            //  3 bytes to go 
 
 
 
@@ -478,111 +481,91 @@ var parseRXData = function (payLoad,version)
 
 
 
-                oregonBTHR968Device =
-                    {
-                        id: SensorID + rollingCode,
-                        SensorID: SensorID,
-                        channel: channel,
-                        rollingCode: rollingCode,
-                        battery: batteryforhomey,
-                        temperature: parseFloat(parseFloat(temperature).toFixed(2)),
-                        humidity: parseInt(humidity),
-                        pressure: parseInt((Number(pressure)).toFixed(2)),
-                        forecast: forecast
-                    };
 
+    //            oregonBTHR968Device =
+    //                {
+    //                    id: SensorID + rollingCode,
+    //                    SensorID: SensorID,
+    //                    channel: channel,
+    //                    rollingCode: rollingCode,
+    //                    battery: batteryforhomey,
+    //                    temperature: parseFloat(parseFloat(temperature).toFixed(2)),
+    //                    humidity: parseInt(humidity),
+    //                    pressure: parseInt((Number(pressure)).toFixed(2)),
+    //                    forecast: forecast
+    //                };
 
-                var homeyDevice =
-                    {
-                        data: { id: oregonBTHR968Device.id },
-                        name: oregonBTHR968Device.id,
-                        capabilities: ["measure_humidity", "measure_pressure", "measure_temperature", "measure_battery"],
-                        measure_temperature: oregonBTHR968Device.temperature,
-                        measure_humidity: oregonBTHR968Device.humidity,
-                        measure_pressure: oregonBTHR968Device.pressure,
-                        measure_battery: oregonBTHR968Device.battery,
-                    };
 
-                function checkIfDeviceIsInHod(deviceIn) {
-                    var matches = driverBTHR968.homeyDevices.filter(function (d) {
-                        return d.address == deviceIn.address;
-                    });
-                    return matches ? matches : null;
-                }
+    //            var homeyDevice =
+    //                {
+    //                    data: { id: oregonBTHR968Device.id },
+    //                    name: oregonBTHR968Device.id,
+    //                    capabilities: ["measure_humidity", "measure_pressure", "measure_temperature", "measure_battery"],
+    //                    measure_temperature: oregonBTHR968Device.temperature,
+    //                    measure_humidity: oregonBTHR968Device.humidity,
+    //                    measure_pressure: oregonBTHR968Device.pressure,
+    //                    measure_battery: oregonBTHR968Device.battery,
+    //                };
 
-                // a = array obj = element
-                function contains(a, obj) {
-                    for (var i = 0; i < a.length; i++) {
-                        if (a[i].data.id == obj.data.id) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
+    //            function checkIfDeviceIsInHod(deviceIn) {
+    //                var matches = driverBTHR968.homeyDevices.filter(function (d) {
+    //                    return d.address == deviceIn.address;
+    //                });
+    //                return matches ? matches : null;
+    //            }
 
-                // console.log('567 parserxdata homeyDevices', util.inspect(homeyDevices, false, null))
+    //            // a = array obj = element
+    //            function contains(a, obj) {
+    //                for (var i = 0; i < a.length; i++) {
+    //                    if (a[i].data.id == obj.data.id) {
+    //                        return true;
+    //                    }
+    //                }
+    //                return false;
+    //            }
 
-                if (!contains(driverBTHR968.homeyDevices, homeyDevice)) {
-                    driverBTHR968.homeyDevices.push(homeyDevice);
-                } else {
+    //            // console.log('567 parserxdata homeyDevices', util.inspect(homeyDevices, false, null))
 
-                    driverBTHR968.updateCapabilitiesHomeyDevice(homeyDevice);
-                }
-                // return homeyDevices;
-            }; // if 5d60
+    //            if (!contains(driverBTHR968.homeyDevices, homeyDevice)) {
+    //                driverBTHR968.homeyDevices.push(homeyDevice);
+    //            } else {
 
-            // THGR122NX
-            if (hexaddress == '1d20' || hexaddress == "1a2d" || hexaddress == "e2cf") {
+    //                driverBTHR968.updateCapabilitiesHomeyDevice(homeyDevice);
+    //            }
+    //            // return homeyDevices;
+    //        }; // if 5d60
 
-                oregonTHGR122NXDevice =
-                    {
-                        id: SensorID + rollingCode,
-                        SensorID: SensorID,
-                        channel: channel,
-                        rollingCode: rollingCode,
-                        battery: batteryforhomey,
-                        temperature: parseFloat(parseFloat(temperature).toFixed(2)),
-                        humidity: parseInt(humidity),
-                        pressure: parseInt((Number(pressure)).toFixed(2)),
-                        forecast: forecast
-                    };
+    //        // THGR122NX
+    //        if (hexaddress == '1d20' || hexaddress == "1a2d" || hexaddress == "e2cf") {
 
+    //            oregonTHGR122NXDevice =
+    //                {
+    //                    id: SensorID + rollingCode,
+    //                    SensorID: SensorID,
+    //                    channel: channel,
+    //                    rollingCode: rollingCode,
+    //                    battery: batteryforhomey,
+    //                    temperature: parseFloat(parseFloat(temperature).toFixed(2)),
+    //                    humidity: parseInt(humidity),
+    //                    pressure: parseInt((Number(pressure)).toFixed(2)),
+    //                    forecast: forecast
+    //                };
 
-                var homeyDevice =
-                    {
-                        data: { id: oregonTHGR122NXDevice.id },
-                        name: oregonTHGR122NXDevice.id,
-                        capabilities: ["measure_temperature", "measure_humidity", "measure_battery"],
-                        measure_temperature: oregonTHGR122NXDevice.temperature,
-                        measure_humidity: oregonTHGR122NXDevice.humidity,
-                        measure_battery: oregonTHGR122NXDevice.battery,
-                    };
 
-                function checkIfDeviceIsInHod(deviceIn) {
-                    var matches = driverTHGR122NX.homeyDevices.filter(function (d) {
-                        return d.address == deviceIn.address;
-                    });
-                    return matches ? matches : null;
-                }
+    //            var homeyDevice =
+    //                {
+    //                    data: { id: oregonTHGR122NXDevice.id },
+    //                    name: oregonTHGR122NXDevice.id,
+    //                    capabilities: ["measure_temperature", "measure_humidity", "measure_battery"],
+    //                    measure_temperature: oregonTHGR122NXDevice.temperature,
+    //                    measure_humidity: oregonTHGR122NXDevice.humidity,
+    //                    measure_battery: oregonTHGR122NXDevice.battery,
+    //                };
 
-                // a = array obj = element
-                function contains(a, obj) {
-                    for (var i = 0; i < a.length; i++) {
-                        if (a[i].data.id == obj.data.id) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
+          
 
-                // console.log('567 parserxdata homeyDevices', util.inspect(homeyDevices, false, null))
 
-                if (!contains(driverTHGR122NX.homeyDevices, homeyDevice)) {
-                    driverTHGR122NX.homeyDevices.push(homeyDevice);
-                } else {
 
-                    driverTHGR122NX.updateCapabilitiesHomeyDevice(homeyDevice);
-                }
 
 
 
@@ -591,11 +574,31 @@ var parseRXData = function (payLoad,version)
 
 
 
+    //            function checkIfDeviceIsInHod(deviceIn) {
+    //                var matches = driverTHGR122NX.homeyDevices.filter(function (d) {
+    //                    return d.address == deviceIn.address;
+    //                });
+    //                return matches ? matches : null;
+    //            }
 
+    //            // a = array obj = element
+    //            function contains(a, obj) {
+    //                for (var i = 0; i < a.length; i++) {
+    //                    if (a[i].data.id == obj.data.id) {
+    //                        return true;
+    //                    }
+    //                }
+    //                return false;
+    //            }
 
-            };  // if 1d20
+    //            // console.log('567 parserxdata homeyDevices', util.inspect(homeyDevices, false, null))
 
+    //            if (!contains(driverTHGR122NX.homeyDevices, homeyDevice)) {
+    //                driverTHGR122NX.homeyDevices.push(homeyDevice);
+    //            } else {
 
+    //                driverTHGR122NX.updateCapabilitiesHomeyDevice(homeyDevice);
+    //            }
 
 
 
@@ -606,7 +609,20 @@ var parseRXData = function (payLoad,version)
 
 
 
-        }; //if correct device
+    //        };  // if 1d20
+
+
+
+
+
+
+
+
+
+
+
+
+    //    }; //if correct device
    
 
 
@@ -617,6 +633,12 @@ var parseRXData = function (payLoad,version)
 
 
 }; //parserxdata
+
+var temphydrobaro = function(datastring) {
+
+
+};
+
 
 var numberToBitArray = function (number, bit_count) {
     var result = [];
@@ -829,10 +851,132 @@ function decodeNibbles(data) {
     util.log('   hexstring  ', util.inspect(hexstring      , false, null));
   //  util.log(' nibbleArray   ', util.inspect(nibbleArray     , false, null));
    
+} // end decode nibbles
+
+
+  // a = array obj = element
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i].data.id == obj.data.id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function checkIfDeviceIsInHod(deviceIn) {
+    var matches = driverBTHR968.homeyDevices.filter(function (d) {
+        return d.address == deviceIn.address;
+    });
+    return matches ? matches : null;
+}
+
+
+function makeHomeyDriverCompatibleAandPasstoDriver(result) {
+
+
+    switch (result.id) {
+
+        case "5d60":
+            processBTHR968(result);
+            break;
+        case "'1d20'":
+            processTHGR122NX(result);
+        case "'1a2d'":
+            processTHGR122NX(result);
+            break;
+
+
+
+
+        }
+
 }
 
 
 
+
+function processBTHR968(result)
+{
+    util.log('  processBTHR968(result) enterd  ');
+
+   var oregonBTHR968Device =
+        {
+            id: result.id +result.rolling,
+            SensorID: result.id,
+            channel: result.channel,
+            rollingCode: result.rolling,
+            battery: result.lowbattery,
+            temperature: parseFloat(parseFloat(result.data.temperature).toFixed(2)),
+            humidity: parseInt(result.data.humidity),
+            pressure: parseInt((Number(result.data.pressure)).toFixed(2)),
+            forecast: result.data.forecast
+        };
+
+
+    var homeyDevice =
+        {
+            data: { id: oregonBTHR968Device.id },
+            name: oregonBTHR968Device.id,
+            capabilities: ["measure_humidity", "measure_pressure", "measure_temperature", "alarm_battery"],
+            measure_temperature: oregonBTHR968Device.temperature,
+            measure_humidity: oregonBTHR968Device.humidity,
+            measure_pressure: oregonBTHR968Device.pressure,
+            alarm_battery: oregonBTHR968Device.battery,
+        };
+
+   
+  
+
+    // console.log('567 parserxdata homeyDevices', util.inspect(homeyDevices, false, null))
+
+    if (!contains(driverBTHR968.homeyDevices, homeyDevice)) {
+        driverBTHR968.homeyDevices.push(homeyDevice);
+    } else {
+
+        driverBTHR968.updateCapabilitiesHomeyDevice(homeyDevice);
+    }
+            // return homeyDevices;
+
+} // end device
+
+function processTHGR122NX(result)
+{
+   var  oregonTHGR122NXDevice =
+        {
+        id: result.id + result.rolling,
+        SensorID: result.id,
+        channel: result.channel,
+        rollingCode: result.rolling,
+        battery: result.lowbattery,
+        temperature: parseFloat(parseFloat(result.data.temperature).toFixed(2)),
+        humidity: parseInt(result.data.humidity),
+        pressure: parseInt((Number(result.data.pressure)).toFixed(2)),
+        forecast: result.data.forecast
+        };
+
+
+    var homeyDevice =
+        {
+            data: { id: oregonTHGR122NXDevice.id },
+            name: oregonTHGR122NXDevice.id,
+            capabilities: ["measure_temperature", "measure_humidity", "alarm_battery"],
+            measure_temperature: oregonTHGR122NXDevice.temperature,
+            measure_humidity: oregonTHGR122NXDevice.humidity,
+            alarm_battery: oregonTHGR122NXDevice.battery,
+        };
+
+
+   
+
+    if (!contains(driverTHGR122NX.homeyDevices, homeyDevice)) {
+        driverTHGR122NX.homeyDevices.push(homeyDevice);
+    } else {
+
+        driverTHGR122NX.updateCapabilitiesHomeyDevice(homeyDevice);
+    }
+    
+};  // end device
 
 
 
@@ -1054,7 +1198,7 @@ function decodeNibbles(data) {
     //        {
     //            data: { id: oregonBTHR968Device.id },
     //            name: oregonBTHR968Device.id,
-    //            capabilities: ["measure_humidity", "measure_pressure", "measure_temperature", "measure_battery"],
+    //            capabilities: ["measure_humidity", "measure_pressure", "measure_temperature", "alarm_battery"],
     //            measure_temperature: oregonBTHR968Device.temperature,
     //            measure_humidity: oregonBTHR968Device.humidity,
     //            measure_pressure: oregonBTHR968Device.pressure,

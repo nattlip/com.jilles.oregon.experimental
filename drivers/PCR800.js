@@ -152,7 +152,7 @@ function createDriver(driver) {
                     console.log('driver 279 capabilitis get device. measure_temperature  ', device.measure_temperature)
                     console.log('driver 201 device_data  ', device_data)
                     if (device instanceof Error) return callback(device);
-                
+
                     self.realtime(device_data, 'measure_temperature', device.measure_temperature);
 
                     // send the dim value to Homey
@@ -190,27 +190,50 @@ function createDriver(driver) {
 
             },
 
-
-
-            alarm_battery: {
+            measure_pressure: {
                 //  watt
 
 
                 get: function (device_data, callback) {
 
-                    console.log('capabilitis getalarm_battery entered')
+                    console.log('capabilitis getmeasure_pressure entered')
 
                     // get the bulb with a locally defined function
                     var device = getDeviceById(device_data);
-                    console.log('driver 279 capabilitis get device.alarm_battery  ', device.alarm_battery)
+                    console.log('driver 279 capabilitis get device.measure_pressure  ', device.measure_pressure)
                     console.log('driver 201 device_data  ', device_data)
                     if (device instanceof Error) return callback(device);
 
-                    self.realtime(device_data, 'alarm_battery', device.alarm_battery);
-                   
+                    self.realtime(device_data, 'measure_pressure', device.measure_pressure);
+
                     // send the dim value to Homey
                     if (typeof callback == 'function') {
-                        callback(null, device.alarm_battery);
+                        callback(null, device.measure_pressure);
+                    }
+                }
+
+            },
+
+
+            measure_battery: {
+                //  watt
+
+
+                get: function (device_data, callback) {
+
+                    console.log('capabilitis getmeasure_battery entered')
+
+                    // get the bulb with a locally defined function
+                    var device = getDeviceById(device_data);
+                    console.log('driver 279 capabilitis get device.measure_battery  ', device.measure_battery)
+                    console.log('driver 201 device_data  ', device_data)
+                    if (device instanceof Error) return callback(device);
+
+                    self.realtime(device_data, 'measure_battery', device.measure_battery);
+
+                    // send the dim value to Homey
+                    if (typeof callback == 'function') {
+                        callback(null, device.measure_battery);
                     }
                 }
 
@@ -257,15 +280,16 @@ function createDriver(driver) {
                 //  console.log('567 updateCapabilitiesHomeyDevice before change homeyDevices[i]  ', util.inspect(homeyDevices[i], false, null));
                 self.homeyDevices[i].measure_temperature = dev.measure_temperature;
                 self.homeyDevices[i].measure_humidity = dev.measure_humidity;
-                self.homeyDevices[i].alarm_battery = dev.alarm_battery;
+                self.homeyDevices[i].measure_pressure = dev.measure_pressure;
+                self.homeyDevices[i].measure_battery = dev.measure_battery;
 
-                self.realtime(self.homeyDevices[i].data, 'measure_temperature', dev.measure_temperature);
                 self.realtime(self.homeyDevices[i].data, 'measure_humidity', dev.measure_humidity);
-                self.realtime(self.homeyDevices[i].data, 'alarm_battery', dev.alarm_battery);
+                self.realtime(self.homeyDevices[i].data, 'measure_temperature', dev.measure_temperature);
+                self.realtime(self.homeyDevices[i].data, 'measure_pressure', dev.measure_pressure);
+                self.realtime(self.homeyDevices[i].data, 'measure_battery', dev.measure_battery);
+
 
                 console.log('updateCapabilitiesHomeyDevice self.homeyDevices[i].data   ', self.homeyDevices[i].data)
-
-
 
                 console.log('567 updateCapabilitiesHomeyDevice after change homeyDevices[i]  ', util.inspect(self.homeyDevices[i], false, null))
 

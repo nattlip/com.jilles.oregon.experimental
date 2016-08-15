@@ -54,7 +54,7 @@
         "nl": "BTHR968"
       },
       "class": "sensor",
-      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "measure_battery" ],
+      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "alarm_battery" ],
       "images": {
         "large": "drivers/BTHR968/assets/images/large.jpg",
         "small": "drivers/BTHR968/assets/images/small.jpg"
@@ -81,7 +81,7 @@
         "nl": "THGR122NX"
       },
       "class": "sensor",
-      "capabilities": [ "measure_temperature", "measure_humidity", "measure_battery" ],
+      "capabilities": [ "measure_temperature", "measure_humidity", "alarm_battery" ],
       "images": {
         "large": "drivers/THGR122NX/assets/images/large.jpg",
         "small": "drivers/THGR122NX/assets/images/small.jpg"
