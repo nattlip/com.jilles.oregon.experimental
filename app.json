@@ -100,6 +100,34 @@
           "template": "add_devices"
         }
       ]
+    },
+
+    {
+      "id": "PCR800",
+      "name": {
+        "en": "PCR800",
+        "nl": "PCR800"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_rain", "alarm_battery" ],
+      "images": {
+        "large": "drivers/PCR800/assets/images/large.jpg",
+        "small": "drivers/PCR800/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
     }
 
 

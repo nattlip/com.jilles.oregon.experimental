@@ -4,6 +4,7 @@
 var util = require('util');
 var driverBTHR968 = require('./drivers/BTHR968/driver.js');
 var driverTHGR122NX = require('./drivers/THGR122NX/driver.js');
+var driverPCR800 = require('./drivers/PCR800/driver.js');
 var convert = require('./baseConverter.js').jan.ConvertBase;
 var initFlag = 1;
 
@@ -241,6 +242,20 @@ var parseRXData = function (payLoad,version)
         util.log('Version 2 data ');
 
 
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
     }  // if v2
 
 
@@ -267,6 +282,40 @@ var parseRXData = function (payLoad,version)
 
     // for testing
     decodeNibbles(datastring);
+
+
+    // to check nan from result  in decodedata
+    if (version == 2) {
+        var baroNibble1 = datastring.slice(64, 68);
+        var baroNibble2 = datastring.slice(68, 72);
+        var baroNibble3 = datastring.slice(72, 76);
+
+
+
+        //convert.bin2hex(baroNibble3) = always 0xC
+        var baroHex = convert.bin2hex(baroNibble1) + convert.bin2hex(baroNibble2);
+        util.log('barohex  ', baroHex);
+        var baroDec = convert.hex2dec(baroHex);
+        util.log('baroDex  ', baroDec);
+        var barometerdec = parseInt(baroDec) + 856;
+
+
+        util.log('barometer  ', barometerdec);
+
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -882,6 +931,7 @@ function makeHomeyDriverCompatibleAandPasstoDriver(result) {
             break;
         case "'1d20'":
             processTHGR122NX(result);
+            break
         case "'1a2d'":
             processTHGR122NX(result);
             break;
@@ -977,6 +1027,44 @@ function processTHGR122NX(result)
     }
     
 };  // end device
+
+
+function processPCR800(result) {
+    var oregonPCR800XDevice =
+        {
+            id: result.id + result.rolling,
+            SensorID: result.id,
+            channel: result.channel,
+            rollingCode: result.rolling,
+            battery: result.lowbattery,
+            rain: result.data.rainrate,
+            raintotal: result.data.raintotal
+        };
+
+
+    var homeyDevice =
+        {
+            data: { id: oregonPCR800Device.id },
+            name: oregonPCR800Device.id,
+            capabilities: ["measure_rain","measure_raintotal"],
+            alarm_battery: oregonPCR800Device.battery,
+        };
+
+
+
+
+    if (!contains(driverPCR800.homeyDevices, homeyDevice)) {
+        driverPCR800.homeyDevices.push(homeyDevice);
+    } else {
+
+        driverPCR800.updateCapabilitiesHomeyDevice(homeyDevice);
+    }
+
+};  // end device
+
+
+
+
 
 
 
