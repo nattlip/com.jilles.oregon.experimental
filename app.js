@@ -929,13 +929,15 @@ function makeHomeyDriverCompatibleAandPasstoDriver(result) {
         case "5d60":
             processBTHR968(result);
             break;
-        case "'1d20'":
+        case "1d20":
             processTHGR122NX(result);
             break
-        case "'1a2d'":
+        case "1a2d":
             processTHGR122NX(result);
             break;
-
+        case "2914":
+            processPCR800(result);
+            break;
 
 
 
@@ -1030,7 +1032,8 @@ function processTHGR122NX(result)
 
 
 function processPCR800(result) {
-    var oregonPCR800XDevice =
+
+    var oregonPCR800Device =
         {
             id: result.id + result.rolling,
             SensorID: result.id,
@@ -1046,7 +1049,8 @@ function processPCR800(result) {
         {
             data: { id: oregonPCR800Device.id },
             name: oregonPCR800Device.id,
-            capabilities: ["measure_rain","measure_raintotal"],
+            capabilities: ["measure_rain"],// ["measure_rain","measure_raintotal"],
+            measure_rain: oregonPCR800Device.rain,
             alarm_battery: oregonPCR800Device.battery,
         };
 
