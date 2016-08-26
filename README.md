@@ -11,7 +11,7 @@ Only the RF 2.1 protocol from  oregon scientific can be read.
 
 
 
-I have now 4 sensor devices  added the BTHR968 device id 5d60 (first for hex digits from name)  and the THGR122NX, THGN132ES, THGR228N device id 1d20 
+I have now 6 sensor devices  added the BTHR968 device id 5d60 (first for hex digits from name)  and the THGR122NX, THGN132ES, THGR228N device id 1d20 rainmeter PCR800 deviceid 2914   and uv meter   UVR128 deviceid ec70
 
 install the THGN132ES or THGR228N as THGR122NX  
 
