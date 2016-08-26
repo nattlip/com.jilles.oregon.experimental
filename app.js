@@ -5,6 +5,7 @@ var util = require('util');
 var driverBTHR968 = require('./drivers/BTHR968/driver.js');
 var driverTHGR122NX = require('./drivers/THGR122NX/driver.js');
 var driverPCR800 = require('./drivers/PCR800/driver.js');
+var driverUVR128 = require('./drivers/UVR128/driver.js');
 var convert = require('./baseConverter.js').jan.ConvertBase;
 var initFlag = 1;
 
@@ -86,8 +87,8 @@ var knownSensors = {
     '1994': { name: 'WGR800', layout: 'W1' },
     '1d20': { name: 'THGN123N/THGR122NX' },
     '1a2d': { name: 'THGR228N/THGN132N/THGR918/THGR928/THGRN228/THGN500' },
-    'e2cf': { name: 'THGR333' },   // deze is het
-    '1d30': { name: 'THGN500' },
+    'e2cf': { name: 'THGR333/THGN228NX', layout: 'TH1' },   // deze is het // kleine in corona
+    '1d30': { name: 'THGN500',layout: 'TH1' }, 
     '1a3d': { name: 'THGR918' },
     '2914': { name: 'PCR800', layout: 'R1' },
     '2a1d': { name: 'RGR918' },
@@ -99,7 +100,7 @@ var knownSensors = {
     'd874': { name: 'UVN800', layout: 'UV2' },
     'ec40': { name: 'THN132N/THR238NF', layout: 'T1' },
     'ea4c': { name: 'THWR288A' },
-    'ec70': { name: 'UVR128', layout: 'UV1' },
+    'ec70': { name: 'UVR128', layout: 'UV1' },  //mijne in corona
     'f824': { name: 'THGN800/THGN801/THGR810', layout: 'TH1' },
     'f8b4': { name: 'THGR810', layout: 'TH1' }
 }
@@ -920,7 +921,7 @@ function checkIfDeviceIsInHod(deviceIn) {
     return matches ? matches : null;
 }
 
-
+//#region choosedevice
 function makeHomeyDriverCompatibleAandPasstoDriver(result) {
 
 
@@ -932,18 +933,24 @@ function makeHomeyDriverCompatibleAandPasstoDriver(result) {
         case "1d20":
             processTHGR122NX(result);
             break
-        case "1a2d":
+        case "1d30":    // kleine corona THGN228NX
             processTHGR122NX(result);
             break;
-        case "2914":
+        case "e2cf":    // kleine corona THGN228NX
+            processTHGR122NX(result);
+            break;
+        case "2914":  // regenmeter
             processPCR800(result);
             break;
-
+        case "ec70":  // UVR128 uv meter corona
+            processUVR128(result);
+            break;
 
 
         }
 
 }
+//#endregion
 
 
 
@@ -1067,7 +1074,55 @@ function processPCR800(result) {
 };  // end device
 
 
+function processUVR128(result) {
 
+    var oregonUVR128Device =
+        {
+            id: result.id + result.rolling,
+            SensorID: result.id,
+            channel: result.channel,
+            rollingCode: result.rolling,
+            battery: result.lowbattery,
+            uvindex: result.data.uvindex,
+          
+        };
+
+
+    var homeyDevice =
+        {
+            data: { id: oregonUVR128Device.id },
+            name: oregonUVR128Device.id,
+            capabilities: ["measure_ultraviolet"],// ["measure_rain"],
+            measure_ultraviolet: oregonUVR128Device.uvindex,
+            alarm_battery: oregonUVR128Device.battery,
+        };
+
+
+
+
+    if (!contains(driverUVR128.homeyDevices, homeyDevice)) {
+        driverUVR128.homeyDevices.push(homeyDevice);
+    } else {
+
+        driverUVR128.updateCapabilitiesHomeyDevice(homeyDevice);
+    }
+
+};  // end device
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TODO: nothing
+//TODO remove not valid and checksum check
 
 
 

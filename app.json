@@ -128,9 +128,35 @@
           "template": "add_devices"
         }
       ]
+    },
+
+    {
+      "id": "UVR128",
+      "name": {
+        "en": "UVR128",
+        "nl": "UVR128"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_ultraviolet", "alarm_battery" ],
+      "images": {
+        "large": "drivers/UVR128/assets/images/large.jpg",
+        "small": "drivers/UVR128/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
     }
-
-
   ],
   "signals": {
     "433": {
